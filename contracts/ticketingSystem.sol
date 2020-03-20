@@ -78,10 +78,64 @@ contract venueList
         venuesRegister[_venueId].owner = _newOwner;
     }
 }
+//This contract contain all the concert containers
+contract concertList{   
+    struct concertProfil{
+        //concert parameters
+        uint artistId;
+        uint venueId;
+        uint concertDate;
+        uint ticketPrice;
+
+        //both validation
+        bool validatedByArtist;
+        bool validatedByVenue;
+
+        bool happening;
+    }
+    //Create the pointer
+    uint pointerConcert = 1;
+    //List of all artist profiles
+    mapping(uint => concertProfil) public concertsRegister;
+}
 //This is the main contract
-contract ticketingSystem is artistList, venueList
+contract ticketingSystem is artistList, venueList, concertList
 {
+    //The constructor, must be empty
     constructor () public{}
+    //Creation of a concert
+    function createConcert(uint _artistId, uint _venueId, uint _concertDate, uint _ticketPrice) public {
+        concertProfil storage newConcert = concertsRegister[pointerConcert];
+        newConcert.artistId =_artistId;
+        newConcert.venueId = _venueId;
+        newConcert.concertDate = _concertDate;
+        newConcert.ticketPrice = _ticketPrice;
+        //Set validation
+        //We test if the sender is one of the actors
+        concertsRegister[pointerConcert].validatedByArtist = (msg.sender == artistsRegister[_artistId].owner);
+        concertsRegister[pointerConcert].validatedByVenue =(msg.sender == venuesRegister[_venueId].owner);
+        
+        concertsRegister[pointerConcert].happening = false;
+        //We increment the pointer
+        pointerConcert = pointerConcert+1;
+    }
+    //Validation of a concert
+    function validateConcert(uint _concertId) public {
+        //check out the artist and venue address
+        address payable artist = artistsRegister[concertsRegister[_concertId].artistId].owner;
+        address payable venue = venuesRegister[concertsRegister[_concertId].venueId].owner;
+        //Not necessary requirement
+        require(
+            (msg.sender == artist || msg.sender == venue),
+            "You are not allowed to validate anything"
+        );
+        if(msg.sender == artist){
+            concertsRegister[_concertId].validatedByArtist = true;
+        }
+        if(msg.sender == venue){
+            concertsRegister[_concertId].validatedByVenue = true;
+        }
+    }
 }
 
 
