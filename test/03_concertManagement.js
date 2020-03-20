@@ -106,48 +106,48 @@ contract('Concert management functions', function (accounts) {
     })
 
 
-//     it('Using tickets', async function (){
-//
-//    // Declaring concert
-//    oneWeek = 60*60*24*7
-//    oneDay = 60*60*24
-//    concertPrice = 1000
-//    concertDate = Math.floor((new Date).getTime()/1000 + oneWeek);
-//    concertDate2 = Math.floor((new Date).getTime()/1000 + oneDay -1);
-//
-//    await TicketingSystemInstance.createConcert(1,1, concertDate, concertPrice, {from: accounts[1]})
-//    await TicketingSystemInstance.validateConcert(1, {from: accounts[0]})
-//    await TicketingSystemInstance.createConcert(1,1, concertDate2, concertPrice, {from: accounts[1]})
-//    
-//    
-//    
-//    // Verifying concert infos
-//    concert1Info = await TicketingSystemInstance.concertsRegister(1)
-//    assert.equal(concert1Info.totalSoldTicket, 0)
-//    assert.equal(concert1Info.totalMoneyCollected, 0)
-//
-//    // Buying 2 tickets for concert 1 and 2
-//    await TicketingSystemInstance.emitTicket(1,  accounts[3],{from: accounts[1]})
-//    await TicketingSystemInstance.emitTicket(2,  accounts[4],{from: accounts[1]})
-//
-//    // Trying to use ticket I do not own
-//    // function useTicket(uint _ticketId)
-//    await tryCatch(TicketingSystemInstance.useTicket(1, {from: accounts[5]}), errTypes.revert);
-//    // Trying to use ticket before the day of the event
-//    await tryCatch(TicketingSystemInstance.useTicket(1, {from: accounts[3]}), errTypes.revert);
-//    // Trying to use ticket before the venue validated the event
-//    await tryCatch(TicketingSystemInstance.useTicket(2, {from: accounts[4]}), errTypes.revert);
-//
-//    // Validating the concert
-//    await TicketingSystemInstance.validateConcert(2, {from: accounts[0]})
-//    // Using a ticket on the day of the event
-//    await TicketingSystemInstance.useTicket(2, {from: accounts[4]})
-//
-//    // Verifying ticket infos
-//    ticketInfo = await TicketingSystemInstance.ticketsRegister(2)
-//    assert.equal(ticketInfo.isAvailable, false)
-//    assert.equal(ticketInfo.owner, 0x0000)
-//    })
+     it('Using tickets', async function (){
+
+    // Declaring concert
+    oneWeek = 60*60*24*7
+    oneDay = 60*60*24
+    concertPrice = 1000
+    concertDate = Math.floor((new Date).getTime()/1000 + oneWeek);
+    concertDate2 = Math.floor((new Date).getTime()/1000 + oneDay -1);
+
+    await TicketingSystemInstance.createConcert(1,1, concertDate, concertPrice, {from: accounts[1]})
+    await TicketingSystemInstance.validateConcert(1, {from: accounts[0]})
+    await TicketingSystemInstance.createConcert(1,1, concertDate2, concertPrice, {from: accounts[1]})
+    
+    
+    
+    // Verifying concert infos
+    concert1Info = await TicketingSystemInstance.concertsRegister(1)
+    assert.equal(concert1Info.totalSoldTicket, 0)
+    assert.equal(concert1Info.totalMoneyCollected, 0)
+
+    // Buying 2 tickets for concert 1 and 2
+    await TicketingSystemInstance.emitTicket(1,  accounts[3],{from: accounts[1]})
+    await TicketingSystemInstance.emitTicket(2,  accounts[4],{from: accounts[1]})
+
+    // Trying to use ticket I do not own
+    // function useTicket(uint _ticketId)
+    await tryCatch(TicketingSystemInstance.useTicket(1, {from: accounts[5]}), errTypes.revert);
+    // Trying to use ticket before the day of the event
+    await tryCatch(TicketingSystemInstance.useTicket(1, {from: accounts[3]}), errTypes.revert);
+    // Trying to use ticket before the venue validated the event
+    await tryCatch(TicketingSystemInstance.useTicket(2, {from: accounts[4]}), errTypes.revert);
+
+    // Validating the concert
+    await TicketingSystemInstance.validateConcert(2, {from: accounts[0]})
+    // Using a ticket on the day of the event
+    await TicketingSystemInstance.useTicket(2, {from: accounts[4]})
+
+    // Verifying ticket infos
+    ticketInfo = await TicketingSystemInstance.ticketsRegister(2)
+    //assert.equal(ticketInfo.isAvailable, false)
+    //assert.equal(ticketInfo.owner, 0x0000)
+    })
 
 
 

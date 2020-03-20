@@ -175,6 +175,31 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold = artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold + 1;
         concertsRegister[_concertId].totalSoldTicket = concertsRegister[_concertId].totalSoldTicket+1;
     }
+    //Use a ticket 
+    function useTicket(uint _ticketId) public {
+        //Do not understand what useTicket is suppose to do
+        //But I know the requirement so :
+
+        //1st you have to be the owner
+        require(
+            msg.sender == ticketsRegister[_ticketId].owner,
+            "You are not the owner of the ticket"
+        );
+
+        //2nd you can't use it more than 24 hours before the event
+        uint oneDay = 60*60*24;
+        require(
+            (now > concertsRegister[ticketsRegister[_ticketId].concertId].concertDate - oneDay ),
+            "You can't use your ticket yet"
+        );
+
+        //3d you can't use it if the venue didn't validate it
+        require(
+            (concertsRegister[ticketsRegister[_ticketId].concertId].validatedByVenue),
+            "The venue didn't validate it yet"
+        );
+
+    }
 }
 
 
