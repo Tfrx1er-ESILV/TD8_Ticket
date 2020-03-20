@@ -7,7 +7,7 @@ contract artistList
         //Artist parameters
         bytes32 name;
         uint artistCategory;
-        uint totalTicketsSold;
+        uint totalTicketSold;
         //Creator
         //This will allow us to prevent someone from changing another person's artist
         address payable owner; 
@@ -21,7 +21,7 @@ contract artistList
         artistProfil storage newArtist = artistsRegister[pointerArtist];
         newArtist.name = _name;
         newArtist.artistCategory = _type;
-        newArtist.totalTicketsSold = 0;
+        newArtist.totalTicketSold = 0;
         newArtist.owner = msg.sender;
         //We increment the pointer
         pointerArtist= pointerArtist +1;

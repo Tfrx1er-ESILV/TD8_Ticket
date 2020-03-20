@@ -11,7 +11,6 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
 {
     //The constructor, must be empty
     constructor () public{}
-    //Creation of a concert
     function createConcert(uint _artistId, uint _venueId, uint _concertDate, uint _ticketPrice) public {
         concertProfil storage newConcert = concertsRegister[pointerConcert];
         newConcert.artistId =_artistId;
@@ -29,7 +28,6 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         //We increment the pointer
         pointerConcert = pointerConcert+1;
     }
-    //Validation of a concert
     function validateConcert(uint _concertId) public {
         //check out the artist and venue address
         address payable artist = artistsRegister[concertsRegister[_concertId].artistId].owner;
@@ -46,7 +44,6 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
             concertsRegister[_concertId].validatedByVenue = true;
         }
     }
-    //Creation of a ticket
     function emitTicket(uint _concertId, address payable _ticketOwner) public {
         //check out the artist address
         address payable artist = artistsRegister[concertsRegister[_concertId].artistId].owner;
@@ -65,10 +62,9 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         pointerTicket = pointerTicket +1;
 
         //We do not forget to add 1 to the ticket sold amount 
-        artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold = artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold + 1;
+        artistsRegister[concertsRegister[_concertId].artistId].totalTicketSold = artistsRegister[concertsRegister[_concertId].artistId].totalTicketSold + 1;
         concertsRegister[_concertId].totalSoldTicket = concertsRegister[_concertId].totalSoldTicket+1;
     }
-    //Use a ticket 
     function useTicket(uint _ticketId) public {
         //Do not understand what useTicket is suppose to do
         //But I know the requirement so :
@@ -95,7 +91,6 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         //We use the ticket then :
         ticketsRegister[_ticketId].isAvailable = false;
     }
-    //Creation of a ticket
     function buyTicket(uint _concertId) public payable {
         //check out the amount paid
 
@@ -114,7 +109,8 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         pointerTicket = pointerTicket +1;
 
         //We do not forget to add 1 to the ticket sold amount 
-        artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold = artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold + 1;
+        artistsRegister[concertsRegister[_concertId].artistId].totalTicketSold = artistsRegister[concertsRegister[_concertId].artistId].totalTicketSold + 1;
+
         concertsRegister[_concertId].totalSoldTicket = concertsRegister[_concertId].totalSoldTicket+1;
         concertsRegister[_concertId].totalMoneyCollected = concertsRegister[_concertId].totalMoneyCollected+msg.value;
     }
@@ -125,6 +121,29 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
             "You are not the owner of the ticket"
         );
         ticketsRegister[_ticketId].owner = _newOwner;
+    }
+    //Cash out Function
+    function cashOutConcert(uint _concertId, address payable _cashOutAddress) public {
+        //check out the artist address
+        address payable artist = artistsRegister[concertsRegister[_concertId].artistId].owner;
+        //1 can only be called by the artist
+        require(
+            (msg.sender == artist),
+            "You are not allowed to cash out"
+        );
+        //2 can only be called after the concert
+        require(
+            (now >= concertsRegister[_concertId].concertDate),
+            "The concert didn't append yet"
+        );
+        
+        uint venueShare = (concertsRegister[_concertId].totalSoldTicket * venuesRegister[concertsRegister[_concertId].venueId].standardComission) / 10000;
+        uint artistShare = concertsRegister[_concertId].totalMoneyCollected - venueShare;
+
+        //We pay the both parts now
+        address payable venue = venuesRegister[concertsRegister[_concertId].venueId].owner;
+        venue.transfer(venueShare);
+        _cashOutAddress.transfer(artistShare);
     }
 }
 
