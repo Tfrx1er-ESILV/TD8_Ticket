@@ -69,41 +69,41 @@ contract('Concert management functions', function (accounts) {
     assert.equal(concert2Info.validatedByVenue, true)
     })
         // Tests routines start with "it"
-//    it('Emitting tickets', async function (){
-//
-//    // Declaring concert
-//    oneWeek = 60*60*24*7
-//    concertPrice = 1000
-//    concertDate = Math.floor((new Date).getTime()/1000 + oneWeek);
-//    await TicketingSystemInstance.createConcert(1,1, concertDate, concertPrice, {from: accounts[1]})
-//    await TicketingSystemInstance.validateConcert(1, {from: accounts[0]})
-//    
-//    // Verifying concert infos
-//    concert1Info = await TicketingSystemInstance.concertsRegister(1)
-//    assert.equal(concert1Info.totalSoldTicket, 0)
-//    assert.equal(concert1Info.totalMoneyCollected, 0)
-//
-//    // Emitting 5 tickets. Only artists can emit tickets.
-//    // function emitTicket(uint _concertId, address payable _ticketOwner)
-//    await TicketingSystemInstance.emitTicket(1,  accounts[2],{from: accounts[1]})
-//    await TicketingSystemInstance.emitTicket(1,  accounts[3],{from: accounts[1]})
-//    await TicketingSystemInstance.emitTicket(1,  accounts[4],{from: accounts[1]})
-//    await TicketingSystemInstance.emitTicket(1,  accounts[5],{from: accounts[1]})
-//    await TicketingSystemInstance.emitTicket(1,  accounts[6],{from: accounts[1]})
-//    // Trying to emit tickets with another account, should fail
-//    await tryCatch(TicketingSystemInstance.emitTicket(1, accounts[5], {from: accounts[2]}), errTypes.revert);
-//
-//
-//    // Verifying concert infos
-//    concert1Info = await TicketingSystemInstance.concertsRegister(1)
-//    assert.equal(concert1Info.totalSoldTicket, 5)
-//    assert.equal(concert1Info.totalMoneyCollected, 0)
-//
-//    // Verifying ticket infos
-//    ticket3Info = await TicketingSystemInstance.ticketsRegister(3)
-//    assert.equal(ticket3Info.owner, accounts[4])
-//    assert.equal(ticket3Info.isAvailable, true)
-//    })
+    it('Emitting tickets', async function (){
+
+    // Declaring concert
+    oneWeek = 60*60*24*7
+    concertPrice = 1000
+    concertDate = Math.floor((new Date).getTime()/1000 + oneWeek);
+    await TicketingSystemInstance.createConcert(1,1, concertDate, concertPrice, {from: accounts[1]})
+    await TicketingSystemInstance.validateConcert(1, {from: accounts[0]})
+    
+    // Verifying concert infos
+    concert1Info = await TicketingSystemInstance.concertsRegister(1)
+    assert.equal(concert1Info.totalSoldTicket, 0)
+    assert.equal(concert1Info.totalMoneyCollected, 0)
+
+    // Emitting 5 tickets. Only artists can emit tickets.
+    // function emitTicket(uint _concertId, address payable _ticketOwner)
+    await TicketingSystemInstance.emitTicket(1,  accounts[2],{from: accounts[1]})
+    await TicketingSystemInstance.emitTicket(1,  accounts[3],{from: accounts[1]})
+    await TicketingSystemInstance.emitTicket(1,  accounts[4],{from: accounts[1]})
+    await TicketingSystemInstance.emitTicket(1,  accounts[5],{from: accounts[1]})
+    await TicketingSystemInstance.emitTicket(1,  accounts[6],{from: accounts[1]})
+    // Trying to emit tickets with another account, should fail
+    await tryCatch(TicketingSystemInstance.emitTicket(1, accounts[5], {from: accounts[2]}), errTypes.revert);
+
+
+    // Verifying concert infos
+    concert1Info = await TicketingSystemInstance.concertsRegister(1)
+    assert.equal(concert1Info.totalSoldTicket, 5)
+    assert.equal(concert1Info.totalMoneyCollected, 0)
+
+    // Verifying ticket infos
+    ticket3Info = await TicketingSystemInstance.ticketsRegister(3)
+    assert.equal(ticket3Info.owner, accounts[4])
+    assert.equal(ticket3Info.isAvailable, true)
+    })
 
 
 //     it('Using tickets', async function (){

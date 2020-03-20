@@ -86,6 +86,8 @@ contract concertList{
         uint venueId;
         uint concertDate;
         uint ticketPrice;
+        uint totalSoldTicket;
+        uint totalMoneyCollected;
 
         //both validation
         bool validatedByArtist;
@@ -98,8 +100,23 @@ contract concertList{
     //List of all artist profiles
     mapping(uint => concertProfil) public concertsRegister;
 }
+//This contract contain all the tickets containers
+contract ticketList{
+    struct ticket{
+        //ticket parameters
+        uint concertId;
+        address payable owner;
+
+        bool isAvailable;
+
+    }
+    //Create the pointer
+    uint pointerTicket = 1;
+    //List of all artist profiles
+    mapping(uint => ticket) public ticketsRegister;
+}
 //This is the main contract
-contract ticketingSystem is artistList, venueList, concertList
+contract ticketingSystem is artistList, venueList, concertList,ticketList
 {
     //The constructor, must be empty
     constructor () public{}
@@ -110,6 +127,8 @@ contract ticketingSystem is artistList, venueList, concertList
         newConcert.venueId = _venueId;
         newConcert.concertDate = _concertDate;
         newConcert.ticketPrice = _ticketPrice;
+        newConcert.totalSoldTicket = 0;
+        newConcert.totalMoneyCollected =0;
         //Set validation
         //We test if the sender is one of the actors
         concertsRegister[pointerConcert].validatedByArtist = (msg.sender == artistsRegister[_artistId].owner);
@@ -135,6 +154,26 @@ contract ticketingSystem is artistList, venueList, concertList
         if(msg.sender == venue){
             concertsRegister[_concertId].validatedByVenue = true;
         }
+    }
+    //Creation of a ticket
+    function emitTicket(uint _concertId, address payable _ticketOwner) public {
+        //check out the artist address
+        address payable artist = artistsRegister[concertsRegister[_concertId].artistId].owner;
+        require(
+            (msg.sender == artist),
+            "You are not allowed to emit a ticket"
+        );
+        //Now we can create a ticket
+        ticket storage newTicket = ticketsRegister[pointerTicket];
+        newTicket.concertId = _concertId;
+        newTicket.owner = _ticketOwner;
+        newTicket.isAvailable  = true;
+
+        pointerTicket = pointerTicket +1;
+
+        //We do not forget to add 1 to the ticket sold amount 
+        artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold = artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold + 1;
+        concertsRegister[_concertId].totalSoldTicket = concertsRegister[_concertId].totalSoldTicket+1;
     }
 }
 
