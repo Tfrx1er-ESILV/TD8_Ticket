@@ -90,6 +90,7 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
 
         //We use the ticket then :
         ticketsRegister[_ticketId].isAvailable = false;
+        ticketsRegister[_ticketId].isAvailableForSale = false;
     }
     function buyTicket(uint _concertId) public payable {
         //check out the amount paid
@@ -122,7 +123,6 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         );
         ticketsRegister[_ticketId].owner = _newOwner;
     }
-    //Cash out Function
     function cashOutConcert(uint _concertId, address payable _cashOutAddress) public {
         //check out the artist address
         address payable artist = artistsRegister[concertsRegister[_concertId].artistId].owner;
@@ -145,7 +145,40 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         venue.transfer(venueShare);
         _cashOutAddress.transfer(artistShare);
     }
+    function offerTicketForSale(uint _ticketId, uint _salePrice) public {
+        //You have to be the owner
+        require(
+            msg.sender == ticketsRegister[_ticketId].owner,
+            "You are not the owner of the ticket"
+        );
+        //You can't offer to sell a ticket more than the price you paid
+        require(
+            _salePrice<= ticketsRegister[_ticketId].amountPaid,
+            "Oh my god too expensive"
+        );
+        //It is now available for sale
+        ticketsRegister[_ticketId].isAvailableForSale = true;
+        ticketsRegister[_ticketId].secondHandPrice = _salePrice;
+
+    }
+    function buySecondHandTicket(uint _ticketId) public payable {
+        //You have to pay the price
+        require(
+            msg.value >= ticketsRegister[_ticketId].secondHandPrice,
+            "It is not enough"
+        );
+        //It has to be available for sale
+        require(
+            ticketsRegister[_ticketId].isAvailableForSale == true,
+            "Not available for sale"
+        );
+        //We make changes
+        ticketsRegister[_ticketId].owner = msg.sender;
+        ticketsRegister[_ticketId].isAvailableForSale = false;
+        ticketsRegister[_ticketId].amountPaid = msg.value;
+    }
 }
+
 
 
 //Made by Théophile Freixa & Ronan Le Tilly

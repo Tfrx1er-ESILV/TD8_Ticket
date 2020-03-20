@@ -11,6 +11,7 @@ contract ticketList{
 
         bool isAvailableForSale;
         uint amountPaid;
+        uint secondHandPrice;
 
     }
     //Create the pointer
