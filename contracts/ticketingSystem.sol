@@ -95,7 +95,7 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         //We use the ticket then :
         ticketsRegister[_ticketId].isAvailable = false;
     }
-        //Creation of a ticket
+    //Creation of a ticket
     function buyTicket(uint _concertId) public payable {
         //check out the amount paid
 
@@ -117,6 +117,14 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold = artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold + 1;
         concertsRegister[_concertId].totalSoldTicket = concertsRegister[_concertId].totalSoldTicket+1;
         concertsRegister[_concertId].totalMoneyCollected = concertsRegister[_concertId].totalMoneyCollected+msg.value;
+    }
+    function transferTicket(uint _ticketId, address payable _newOwner) public {
+        //1st you have to be the owner
+        require(
+            msg.sender == ticketsRegister[_ticketId].owner,
+            "You are not the owner of the ticket"
+        );
+        ticketsRegister[_ticketId].owner = _newOwner;
     }
 }
 
