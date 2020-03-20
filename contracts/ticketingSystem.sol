@@ -59,6 +59,8 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         newTicket.concertId = _concertId;
         newTicket.owner = _ticketOwner;
         newTicket.isAvailable  = true;
+        newTicket.isAvailableForSale  = false;
+        newTicket.amountPaid  = 0;
 
         pointerTicket = pointerTicket +1;
 
@@ -90,6 +92,31 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
             "The venue didn't validate it yet"
         );
 
+        //We use the ticket then :
+        ticketsRegister[_ticketId].isAvailable = false;
+    }
+        //Creation of a ticket
+    function buyTicket(uint _concertId) public payable {
+        //check out the amount paid
+
+        require(
+            (msg.value >= concertsRegister[_concertId].ticketPrice),
+            "You didn't paid enough"
+        );
+        //Now we can create a ticket
+        ticket storage newTicket = ticketsRegister[pointerTicket];
+        newTicket.concertId = _concertId;
+        newTicket.owner = msg.sender;
+        newTicket.isAvailable  = true;
+        newTicket.isAvailableForSale  = false;
+        newTicket.amountPaid = msg.value;
+
+        pointerTicket = pointerTicket +1;
+
+        //We do not forget to add 1 to the ticket sold amount 
+        artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold = artistsRegister[concertsRegister[_concertId].artistId].totalTicketsSold + 1;
+        concertsRegister[_concertId].totalSoldTicket = concertsRegister[_concertId].totalSoldTicket+1;
+        concertsRegister[_concertId].totalMoneyCollected = concertsRegister[_concertId].totalMoneyCollected+msg.value;
     }
 }
 

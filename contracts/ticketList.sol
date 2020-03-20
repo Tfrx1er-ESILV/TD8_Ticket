@@ -9,6 +9,9 @@ contract ticketList{
 
         bool isAvailable;
 
+        bool isAvailableForSale;
+        uint amountPaid;
+
     }
     //Create the pointer
     uint pointerTicket = 1;

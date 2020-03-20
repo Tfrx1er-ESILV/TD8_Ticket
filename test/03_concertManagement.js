@@ -145,7 +145,7 @@ contract('Concert management functions', function (accounts) {
 
     // Verifying ticket infos
     ticketInfo = await TicketingSystemInstance.ticketsRegister(2)
-    //assert.equal(ticketInfo.isAvailable, false)
+    assert.equal(ticketInfo.isAvailable, false)
     //assert.equal(ticketInfo.owner, 0x0000)
     })
 
