@@ -52,21 +52,21 @@ contract('Concert management functions', function (accounts) {
 
     })
 
-//     it('Using bought tickets', async function (){
-//
-//    // Buying 2 tickets
-//    await TicketingSystemInstance.buyTicket(1, {from: accounts[3], value: concertPrice})
-//    // Trying to use ticket I do not own
-//    await tryCatch(TicketingSystemInstance.useTicket(1, {from: accounts[5]}), errTypes.revert);
-//
-//    // Using a ticket on the day of the event
-//    await TicketingSystemInstance.useTicket(1, {from: accounts[3]})
-//
-//    // Verifying ticket infos
-//    ticketInfo = await TicketingSystemInstance.ticketsRegister(1)
-//    assert.equal(ticketInfo.isAvailable, false)
-//    assert.equal(ticketInfo.owner, 0x0000)
-//    })
+     it('Using bought tickets', async function (){
+
+    // Buying 2 tickets
+    await TicketingSystemInstance.buyTicket(1, {from: accounts[3], value: concertPrice})
+    // Trying to use ticket I do not own
+    await tryCatch(TicketingSystemInstance.useTicket(1, {from: accounts[5]}), errTypes.revert);
+
+    // Using a ticket on the day of the event
+    await TicketingSystemInstance.useTicket(1, {from: accounts[3]})
+
+    // Verifying ticket infos
+    ticketInfo = await TicketingSystemInstance.ticketsRegister(1)
+    assert.equal(ticketInfo.isAvailable, false)
+    //assert.equal(ticketInfo.owner, 0x0000)
+    })
 //
 //    it('Transferring tickets', async function (){
 //
