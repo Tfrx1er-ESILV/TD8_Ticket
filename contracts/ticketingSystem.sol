@@ -91,6 +91,7 @@ contract ticketingSystem is artistList, venueList, concertList,ticketList
         //We use the ticket then :
         ticketsRegister[_ticketId].isAvailable = false;
         ticketsRegister[_ticketId].isAvailableForSale = false;
+        ticketsRegister[_ticketId].owner = 0x0000000000000000000000000000000000000000;
     }
     function buyTicket(uint _concertId) public payable {
         //check out the amount paid
